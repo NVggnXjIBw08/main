@@ -1,0 +1,46 @@
+﻿StreamWriter __writer = new StreamWriter("prenoms.xml", false);
+__writer.WriteLine(String.Format("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+__writer.WriteLine(String.Format("<prenoms>"));
+int __index = 1900;
+while (__index < 2013)
+{
+    __writer.WriteLine(String.Format("<top annee=\"{0}\">", __index));
+    List<string> __prenomsFeminins = new List<string>();
+    List<string> __prenomsMasculins = new List<string>();
+    int __page = 1;
+    while (__page <= 10)
+    {
+        StreamReader __reader = new StreamReader(String.Format("topannee_annee-{0}_page-{1}.html", __index, __page));
+        string __source = __reader.ReadToEnd();
+        List<string> __temp = new List<string>();
+        getListeFromModele(__source, "<td class=\"mpfont\">[*]</td>", ref __temp, true);
+        if (__temp.Count == 3)
+        {
+            List<string> __prenoms = new List<string>();
+            getListeFromModele(__temp[1], "<a href=\"/stats/prenom.php3/[*]\">", ref __prenoms, false);
+            __prenomsMasculins.AddRange(__prenoms);
+            getListeFromModele(__temp[2], "<a href=\"/stats/prenom.php3/[*]\">", ref __prenoms, false);
+            __prenomsFeminins.AddRange(__prenoms);
+        }
+        __reader.Close();
+        __reader.Dispose();
+        __page++;
+    }
+    __writer.WriteLine(String.Format("<sexe id=\"{0}\">", "Feminin"));
+    foreach (string __prenom in __prenomsFeminins)
+    {
+        __writer.WriteLine(String.Format("<prenom>{0}</prenom>", __prenom));
+    }
+    __writer.WriteLine(String.Format("</sexe>"));
+    __writer.WriteLine(String.Format("<sexe id=\"{0}\">", "Masculin"));
+    foreach (string __prenom in __prenomsMasculins)
+    {
+        __writer.WriteLine(String.Format("<prenom>{0}</prenom>", __prenom));
+    }
+    __writer.WriteLine(String.Format("</sexe>"));
+    __writer.WriteLine(String.Format("</top>"));
+    __index++;
+}
+__writer.WriteLine(String.Format("</prenoms>"));
+__writer.Close();
+__writer.Dispose();

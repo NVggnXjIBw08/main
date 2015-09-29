@@ -1,0 +1,34 @@
+﻿StreamWriter __writer = new StreamWriter("Villes.xml", false);
+__writer.WriteLine(String.Format("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+__writer.WriteLine(String.Format("<villes>"));
+StreamReader __sr = new StreamReader(@"C:\Temp\20140221\sql-villes-france\villes_france.xml");
+string __contenu = __sr.ReadToEnd();
+List<string> __villes = new List<string>();
+getListeFromModele(__contenu, "<table name=\"villes_france\">[*]</table>", ref __villes, true);
+int __index = 0;
+while (__index < __villes.Count)
+{
+    List<string> __temp = new List<string>();
+    string __ville = "";
+    getListeFromModele(__villes[__index], "<column name=\"ville_nom\">[*]</column>", ref __temp, false);
+    if (__temp.Count == 1)
+    {
+        __ville = __temp[0];
+    }
+    string __codePostal = "";
+    getListeFromModele(__villes[__index], "<column name=\"ville_code_postal\">[*]</column>", ref __temp, false);
+    if (__temp.Count == 1)
+    {
+        __codePostal = __temp[0];
+    }
+    if (__ville != "" && __codePostal != "")
+    {
+        __writer.WriteLine(String.Format("<ville codePostal=\"{0}\">{1}</ville>", __codePostal, __ville));
+    }
+    __index++;
+}
+__sr.Close();
+__sr.Dispose();
+__writer.WriteLine(String.Format("</villes>"));
+__writer.Close();
+__writer.Dispose();

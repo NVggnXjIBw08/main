@@ -1,0 +1,38 @@
+﻿List<string> __prenomsFeminins = new List<string>();
+List<string> __prenomsMasculins = new List<string>();
+int __index = 1;
+while (__index < 58)
+{
+    StreamReader __sr = new StreamReader(String.Format("prenoms-{0}.html", __index));
+    string __source = __sr.ReadToEnd();
+    List<string> __temp = new List<string>();
+    getListeFromModele(__source, "<div class=\"pg-result\">[*]<div id=\"footer\">", ref __temp, true);
+    if (__temp.Count == 1)
+    {
+        List<string> __liste = new List<string>();
+        getListeFromModele(__temp[0], "<li>[*]</li>", ref __liste, false, true);
+        //__prenomsFeminins.AddRange(__prenomsTemp);
+        //__prenomsMasculins.AddRange(__prenomsTemp);
+    }
+    else
+    {
+        Console.Write("");
+    }
+    __sr.Close();
+    __sr.Dispose();
+    __index++;
+}
+StreamWriter __writerFeminins = new StreamWriter("prenomsFeminins.xml", false);
+foreach (string __prenom in __prenomsFeminins)
+{
+    __writerFeminins.WriteLine(String.Format("<prenom>{0}</prenom>", __prenom));
+}
+__writerFeminins.Close();
+__writerFeminins.Dispose();
+StreamWriter __writerMasculins = new StreamWriter("prenomsMasculins.xml", false);
+foreach (string __prenom in __prenomsMasculins)
+{
+    __writerMasculins.WriteLine(String.Format("<prenom>{0}</prenom>", __prenom));
+}
+__writerMasculins.Close();
+__writerMasculins.Dispose();

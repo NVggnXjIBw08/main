@@ -1,0 +1,18 @@
+﻿string __url = "http://meilleursprenoms.com/stats/topannee.php3?annee={0}&page={1}";
+WebClient __wc = new WebClient();
+int __index = 1900;
+while (__index < 2013)
+{
+    int __page = 1;
+    while (__page <= 10)
+    {
+        string __source = __wc.DownloadString(String.Format(__url, __index, __page));
+        StreamWriter __sr = new StreamWriter(String.Format("topannee_annee-{0}_page-{1}.html", __index, __page), false);
+        __sr.Write(__source);
+        __sr.Close();
+        __sr.Dispose();
+        __page++;
+    }
+    __index++;
+}
+__wc.Dispose();
