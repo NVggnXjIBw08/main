@@ -11,7 +11,7 @@ namespace EncryptDecrypFile
     class Program
     {
 
-        static string iv = "S5Y4Jg4eSv5sPy44";
+        static string iv = "****************";
 
         /// <summary>
         /// 
